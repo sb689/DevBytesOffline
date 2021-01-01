@@ -31,9 +31,7 @@ data class DatabaseVideo constructor(
         val description: String,
         val thumbnail: String
 )
-// TODO (01) Create the DatabaseEntities class, adding annotations for the class and the primary key.
 
-// TODO (02) Define extension function List<DatabaseVideo>.asDomainModel(), that returns
 // a list of <Video>.
 
 fun List<DatabaseVideo>.asDomainModel():List<Video>{
