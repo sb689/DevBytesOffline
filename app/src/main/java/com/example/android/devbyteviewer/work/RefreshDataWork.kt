@@ -16,3 +16,37 @@
  */
 
 package com.example.android.devbyteviewer.work
+
+import android.content.Context
+import android.util.Log
+import androidx.work.CoroutineWorker
+import androidx.work.Logger
+import androidx.work.WorkerParameters
+import com.example.android.devbyteviewer.database.getDatabase
+import com.example.android.devbyteviewer.repository.VideoRepository
+import timber.log.Timber
+import java.lang.Exception
+
+class RefreshDataWork(appContext: Context, params: WorkerParameters) :
+        CoroutineWorker(appContext, params) {
+
+    companion object {
+
+        const val WORK_NAME = "RefreshWorker"
+    }
+
+    override suspend fun doWork(): Result {
+        val database = getDatabase(applicationContext)
+        val repository = VideoRepository(database)
+        return try {
+
+            repository.refreshVideos()
+            Timber.d("refreshVideos() call in worker succeed")
+            Result.success()
+        } catch (ex: Exception) {
+            Timber.d("refreshVideos() call in worker failed, going to retry")
+            Result.retry()
+        }
+    }
+
+}
